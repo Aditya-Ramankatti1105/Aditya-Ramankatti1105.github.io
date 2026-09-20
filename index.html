@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aditya Ramankatti — Software Engineer</title>
+<meta name="description" content="Final-year computer science student building machine learning systems and web applications. Belagavi, India.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+
+    --ink:        #0F1216;
+    --panel:      #161A20;
+    --line:       #262C35;
+    --text:       #E4E3DF;
+    --muted:      #99A1AC;
+    --accent:     #8E90F2;
+    --accent-dim: #5D5FB8;
+    --metric:     #E3A857;
+
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --rail: 250px;
+
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  *, *::before, *::after { box-sizing: inherit; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 24px); }
+
+  body{
+    margin:0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .skip{
+    position:absolute; left:-9999px; top:0;
+    background: var(--accent); color:#0F1216;
+    padding:.6rem 1rem; font-weight:600; z-index:99;
+  }
+  .skip:focus { left: 12px; top: 12px; }
+
+  /* ---------- layout ---------- */
+
+  .wrap{
+    display:grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    gap: 0;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* ---------- left rail ---------- */
+
+  .rail{
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    padding: 3.2rem 2rem 2rem 1.6rem;
+    border-right: 1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+  }
+
+  .rail .mark{
+    font-family: var(--mono);
+    font-size: .74rem;
+    letter-spacing: .06em;
+    color: var(--accent);
+    margin-bottom: 1.6rem;
+  }
+
+  .rail h1{
+    font-size: 1.12rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 0 .35rem;
+    letter-spacing: -0.01em;
+  }
+
+  .rail .place{
+    font-size: .84rem;
+    color: var(--muted);
+    margin: 0 0 2.4rem;
+  }
+
+  nav ul{ list-style:none; margin:0; padding:0; }
+  nav li { margin-bottom: .1rem; }
+
+  nav a{
+    display:block;
+    text-decoration:none;
+    font-size: .92rem;
+    color: var(--muted);
+    padding: .3rem 0 .3rem .9rem;
+    border-left: 2px solid transparent;
+    transition: color .18s ease, border-color .18s ease;
+  }
+  nav a:hover, nav a.on{
+    color: var(--text);
+    border-left-color: var(--accent);
+  }
+
+  .rail .foot{
+    margin-top:auto;
+    padding-top: 1.6rem;
+    font-family: var(--mono);
+    font-size: .76rem;
+    line-height: 2;
+  }
+  .rail .foot a{
+    color: var(--muted);
+    text-decoration:none;
+    border-bottom: 1px solid transparent;
+  }
+  .rail .foot a:hover{ color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  /* ---------- main ---------- */
+
+  main{ padding: 3.2rem 2.4rem 5rem 3.2rem; min-width:0; }
+
+  section{ margin-bottom: 4.4rem; }
+  section:last-child{ margin-bottom: 0; }
+
+  .lede h2{
+    font-size: clamp(1.9rem, 4.2vw, 2.9rem);
+    font-weight: 700;
+    line-height: 1.16;
+    letter-spacing: -0.028em;
+    margin: 0 0 1.3rem;
+    max-width: 17ch;
+  }
+
+  .lede p{
+    max-width: 58ch;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
+  .lede p strong{ color: var(--text); font-weight: 500; }
+
+  .actions{ margin-top: 1.8rem; display:flex; flex-wrap:wrap; gap:.7rem; }
+
+  /* ---------- hero 3D volume ---------- */
+
+  .lede{ position: relative; }
+  .lede-text{ position: relative; z-index: 2; max-width: 55%; }
+
+  .viz-wrap{
+    position: absolute;
+    top: -30px;
+    right: -10px;
+    width: 43%;
+    height: 430px;
+    z-index: 1;
+  }
+  #viz{
+    display:block;
+    width:100%;
+    height:100%;
+    cursor: grab;
+    touch-action: pan-y;
+  }
+  #viz.dragging{ cursor: grabbing; }
+
+  .viz-hint{
+    position:absolute;
+    bottom: 4px;
+    right: 6px;
+    margin:0;
+    font-family: var(--mono);
+    font-size:.7rem;
+    color: var(--muted);
+    opacity:.55;
+    pointer-events:none;
+    transition: opacity .4s ease;
+  }
+  .viz-hint.gone{ opacity:0; }
+
+  .viz-caption{
+    position:absolute;
+    bottom: 4px;
+    left: 2px;
+    margin:0;
+    font-family: var(--mono);
+    font-size:.7rem;
+    color: var(--muted);
+    opacity:.55;
+    pointer-events:none;
+    max-width: 60%;
+    line-height:1.5;
+  }
+
+  .btn{
+    display:inline-block;
+    text-decoration:none;
+    font-size:.9rem;
+    font-weight:600;
+    padding:.6rem 1.15rem;
+    border:1px solid var(--accent-dim);
+    color: var(--accent);
+    transition: background .18s ease, color .18s ease;
+  }
+  .btn:hover{ background: var(--accent); color: #0F1216; }
+  .btn.quiet{ border-color: var(--line); color: var(--muted); }
+  .btn.quiet:hover{ background: var(--panel); color: var(--text); }
+
+  h3.head{
+    font-size: .95rem;
+    font-weight: 600;
+    margin: 0 0 1.6rem;
+    padding-bottom: .55rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+  }
+  h3.head span{ color: var(--muted); font-weight: 400; font-family: var(--mono); font-size: .8rem; margin-left:.5rem; }
+
+  /* ---------- project blocks ---------- */
+
+  .work{
+    display:grid;
+    grid-template-columns: 210px minmax(0,1fr);
+    gap: 0 2.4rem;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .work:first-of-type{ border-top: none; }
+
+  .work h4{
+    font-size: 1.04rem;
+    font-weight: 600;
+    margin: 0 0 .5rem;
+    line-height:1.35;
+  }
+
+  .stack{
+    font-family: var(--mono);
+    font-size: .76rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin: 0 0 .8rem;
+  }
+
+  .repo{
+    font-family: var(--mono);
+    font-size:.76rem;
+    color: var(--accent);
+    text-decoration:none;
+    border-bottom:1px solid var(--accent-dim);
+  }
+  .repo:hover{ color: var(--text); }
+
+  .work ul{ margin:0; padding:0; list-style:none; }
+  .work li{
+    position:relative;
+    padding-left: 1.05rem;
+    margin-bottom:.52rem;
+    max-width: 66ch;
+  }
+  .work li::before{
+    content:"";
+    position:absolute;
+    left:0; top:.72em;
+    width:5px; height:1px;
+    background: var(--accent-dim);
+  }
+  .work li:last-child{ margin-bottom:0; }
+
+  .metric{ color: var(--metric); font-weight:600; font-variant-numeric: tabular-nums; }
+
+  /* ---------- skills ---------- */
+
+  .skills{ display:grid; gap:.1rem; }
+  .row{
+    display:grid;
+    grid-template-columns: 210px minmax(0,1fr);
+    gap: 0 2.4rem;
+    padding: .7rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row dt{
+    font-family: var(--mono);
+    font-size:.78rem;
+    color: var(--muted);
+    padding-top:.15rem;
+  }
+  .row dd{ margin:0; font-size:.94rem; }
+
+  /* ---------- background ---------- */
+
+  .bg-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 2.2rem; }
+  .bg-grid h5{
+    font-size:.82rem;
+    font-family: var(--mono);
+    font-weight:500;
+    color: var(--accent);
+    margin:0 0 .8rem;
+  }
+  .bg-grid ul{ list-style:none; margin:0; padding:0; font-size:.92rem; }
+  .bg-grid li{ margin-bottom:.55rem; color: var(--muted); }
+  .bg-grid li b{ color: var(--text); font-weight:600; }
+  .bg-grid p{ margin:0 0 .35rem; }
+  .bg-grid .deg{ font-weight:600; color: var(--text); }
+  .bg-grid .yr{ font-family: var(--mono); font-size:.78rem; color: var(--muted); }
+
+  /* ---------- contact ---------- */
+
+  .contact p{ max-width: 54ch; color: var(--muted); margin:0 0 1.4rem; }
+  .contact .lines{ font-family: var(--mono); font-size:.88rem; line-height:2.1; }
+  .contact .lines a{ color: var(--text); text-decoration:none; border-bottom:1px solid var(--line); }
+  .contact .lines a:hover{ color: var(--accent); border-bottom-color: var(--accent-dim); }
+  .contact .lines span{ color: var(--muted); display:inline-block; width:5.5rem; }
+
+  /* ---------- page-load reveal (one orchestrated moment) ---------- */
+
+  .fade{ opacity:0; transform: translateY(6px); animation: rise .55s cubic-bezier(.22,.7,.3,1) forwards; }
+  .rail .mark{ animation-delay:.02s }
+  .rail h1{ animation-delay:.08s }
+  .rail .place{ animation-delay:.12s }
+  .rail nav{ animation-delay:.18s }
+  .rail .foot{ animation-delay:.24s }
+  .lede h2{ animation-delay:.12s }
+  .lede .body{ animation-delay:.2s }
+  .lede .actions{ animation-delay:.28s }
+
+  @keyframes rise{ to{ opacity:1; transform:none; } }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .fade{ animation:none; opacity:1; transform:none; }
+    *{ transition:none !important; }
+  }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 860px){
+    .wrap{ grid-template-columns: 1fr; }
+    .rail{
+      position: static;
+      height:auto;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+      padding: 2.4rem 1.4rem 1.6rem;
+    }
+    .rail .place{ margin-bottom: 1.4rem; }
+    nav ul{ display:flex; flex-wrap:wrap; gap:.2rem 1.4rem; }
+    nav a{ padding:.2rem 0; border-left:none; border-bottom:2px solid transparent; }
+    nav a:hover, nav a.on{ border-left-color:transparent; border-bottom-color: var(--accent); }
+    .rail .foot{ margin-top:1.4rem; padding-top:1.2rem; border-top:1px solid var(--line); }
+    main{ padding: 2.4rem 1.4rem 4rem; }
+    .lede{ display:flex; flex-direction:column; }
+    .lede-text{ max-width:100%; }
+    .viz-wrap{
+      position: static;
+      width: 100%;
+      height: 230px;
+      margin: 0 0 1.4rem;
+      order: -1;
+    }
+    .viz-caption{ display:none; }
+    .work, .row{ grid-template-columns: 1fr; gap:0; }
+    .work h4{ margin-bottom:.35rem; }
+    .stack{ margin-bottom:.5rem; }
+    .work ul{ margin-top:.9rem; }
+    .row dt{ margin-bottom:.2rem; }
+    .contact .lines span{ display:block; width:auto; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="wrap">
+
+  <!-- ============ LEFT RAIL ============ -->
+  <aside class="rail">
+    <div class="mark fade">CS &middot; 2027</div>
+    <h1 class="fade">Aditya Ramankatti</h1>
+    <p class="place fade">Belagavi, Karnataka</p>
+
+    <nav class="fade" aria-label="Sections">
+      <ul>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#background">Background</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="foot fade">
+      <a href="https://github.com/Aditya-Ramankatti1105" target="_blank" rel="noopener">GitHub</a><br>
+      <a href="https://linkedin.com/in/aditya-ramankatti-637ba8271" target="_blank" rel="noopener">LinkedIn</a><br>
+      <a href="mailto:adityajr1105@gmail.com">Email</a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main id="main">
+
+    <section class="lede">
+      <div class="viz-wrap">
+        <canvas id="viz" aria-hidden="true"></canvas>
+        <p class="viz-hint" id="vizHint">drag to rotate</p>
+        <p class="viz-caption">Most evenings, roughly.</p>
+      </div>
+
+      <div class="lede-text">
+      <h2 class="fade">I train models to read what people don't have time to.</h2>
+      <div class="body">
+        <p class="fade">Two of my projects do the same job in different domains. One reads lumbar MRI scans
+        and names the condition. The other reads hour-long videos and papers and gives you the argument
+        in a paragraph.</p>
+        <p class="fade">I'm in my final year of computer science engineering, graduating <strong>May 2027</strong>.
+        I work mostly in Python and Java, and I'm building out backend work in Spring Boot next.</p>
+      </div>
+      <div class="actions fade">
+        <a class="btn" href="#work">See the work</a>
+        <a class="btn quiet" href="resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+      </div>
+      </div>
+    </section>
+
+    <!-- ============ WORK ============ -->
+    <section id="work">
+      <h3 class="head">Work <span>2 projects</span></h3>
+
+      <article class="work">
+        <div>
+          <h4>Lumbar Spine Disorder Detection</h4>
+          <p class="stack">Python<br>DenseNet · Transfer learning<br>Streamlit</p>
+          <a class="repo" href="https://github.com/Aditya-Ramankatti1105" target="_blank" rel="noopener">View code</a>
+        </div>
+        <ul>
+          <li>Classifies lumbar MRI scans into four conditions: normal spine, disc degeneration, disc herniation and bulging disc.</li>
+          <li>Reached <span class="metric">95% test accuracy</span> with DenseNet and transfer learning, working from a small medical imaging dataset.</li>
+          <li>Used preprocessing and augmentation to stop the model overfitting to a limited set of scans.</li>
+          <li>Built a Streamlit interface that returns a prediction, a confidence score and a visual explanation of what the model looked at.</li>
+        </ul>
+      </article>
+
+      <article class="work">
+        <div>
+          <h4>Smart Summarizer</h4>
+          <p class="stack">Python<br>Google Gemini API<br>Web app</p>
+          <a class="repo" href="https://github.com/Aditya-Ramankatti1105" target="_blank" rel="noopener">View code</a>
+        </div>
+        <ul>
+          <li>Takes a YouTube link or a PDF and returns a summary you can read in under a minute.</li>
+          <li>Pulls transcripts from YouTube and extracts text from PDFs automatically, so nothing has to be pasted in by hand.</li>
+          <li>Runs the extracted text through the Gemini API with prompts tuned to keep the source's actual argument rather than a generic abstract.</li>
+          <li>Cut review time by roughly <span class="metric">60%</span> in testing against reading the source directly.</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- ============ SKILLS ============ -->
+    <section id="skills">
+      <h3 class="head">Skills</h3>
+      <dl class="skills">
+        <div class="row"><dt>Languages</dt><dd>Java, Python, C, JavaScript, HTML, CSS</dd></div>
+        <div class="row"><dt>Backend</dt><dd>Spring Boot, JDBC, Node.js, REST APIs</dd></div>
+        <div class="row"><dt>Frontend</dt><dd>React.js, Streamlit</dd></div>
+        <div class="row"><dt>Data</dt><dd>MySQL, SQL</dd></div>
+        <div class="row"><dt>Tools</dt><dd>Git, GitHub, VS Code, Jupyter Notebook</dd></div>
+        <div class="row"><dt>Coursework</dt><dd>Data structures &amp; algorithms, operating systems, computer networks, DBMS</dd></div>
+      </dl>
+    </section>
+
+    <!-- ============ BACKGROUND ============ -->
+    <section id="background">
+      <h3 class="head">Background</h3>
+      <div class="bg-grid">
+
+        <div>
+          <h5>Education</h5>
+          <p class="deg">B.E. Computer Science &amp; Engineering</p>
+          <p style="margin:.1rem 0 .3rem; color:var(--muted); font-size:.92rem;">Hirasugar Institute of Technology, Nidasoshi</p>
+          <p class="yr">Aug 2023 – May 2027 · CGPA 8.4 / 10</p>
+        </div>
+
+        <div>
+          <h5>Selected</h5>
+          <ul>
+            <li><b>Second rank</b>, Mini Project Exhibition, Hirasugar Institute of Technology</li>
+            <li><b>Eureka!</b>, IIT Bombay — national business plan and startup pitching competition</li>
+            <li><b>Algo-Rhythm 2.0</b> — UI/UX design competition, Dr. A. D. Shinde College of Engineering</li>
+          </ul>
+        </div>
+
+        <div>
+          <h5>Certifications</h5>
+          <ul>
+            <li>Generative AI Foundations — AWS</li>
+            <li>AI Fundamentals — IBM</li>
+            <li>Python Programming — GeeksforGeeks</li>
+            <li>UNIX &amp; Linux Fundamentals — Infosys</li>
+            <li>HTML5 — Infosys</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="contact">
+      <h3 class="head">Contact</h3>
+      <p>I'm looking for software engineering roles starting June 2027, and internships before that.
+      The fastest way to reach me is email.</p>
+      <div class="lines">
+        <span>Email</span><a href="mailto:adityajr1105@gmail.com">adityajr1105@gmail.com</a><br>
+        <span>Phone</span><a href="tel:+917795823427">+91 77958 23427</a><br>
+        <span>GitHub</span><a href="https://github.com/Aditya-Ramankatti1105" target="_blank" rel="noopener">Aditya-Ramankatti1105</a><br>
+        <span>LinkedIn</span><a href="https://linkedin.com/in/aditya-ramankatti-637ba8271" target="_blank" rel="noopener">aditya-ramankatti</a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ------------------------------------------------------------------
+   Hero visual: a low-poly developer at a desk, lit by the laptop
+   screen. Hands type, the head bobs, steam drifts off the mug.
+   Drag to look around; it eases back on its own.
+------------------------------------------------------------------ */
+(function () {
+  var canvas = document.getElementById('viz');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var small   = window.innerWidth < 860;
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  var scene  = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  camera.position.set(3.15, 2.45, 5.65);
+  camera.lookAt(0, 0.55, -0.5);
+
+  var world = new THREE.Group();
+  scene.add(world);
+
+  // ---------- palette ----------
+  function mat(hex, rough, metal) {
+    return new THREE.MeshStandardMaterial({
+      color: hex, roughness: rough === undefined ? 0.85 : rough, metalness: metal || 0
+    });
+  }
+  var mDesk   = mat(0x2b313a, 0.78);
+  var mLeg    = mat(0x212730, 0.9);
+  var mChair  = mat(0x1d2128, 0.95);
+  var mHoodie = mat(0x5d5fb8, 0.82);
+  var mSkin   = mat(0xbb8a66, 0.9);
+  var mHair   = mat(0x17181d, 0.95);
+  var mLap    = mat(0x3b424c, 0.55, 0.25);
+  var mMug    = mat(0xe3a857, 0.7);
+  var mFloor  = mat(0x141922, 1);
+
+  var mScreen = new THREE.MeshBasicMaterial({ color: 0x9698f5 });
+
+  function box(w, h, d, m, x, y, z) {
+    var b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+    b.position.set(x, y, z);
+    return b;
+  }
+
+  // Build a rectangular limb running from point a to point b.
+  var UP = new THREE.Vector3(0, 1, 0);
+  function segment(a, b, w, m) {
+    var dir = new THREE.Vector3().subVectors(b, a);
+    var len = dir.length();
+    var mesh = new THREE.Mesh(new THREE.BoxGeometry(w, len, w), m);
+    mesh.position.copy(a).add(b).multiplyScalar(0.5);
+    mesh.quaternion.setFromUnitVectors(UP, dir.normalize());
+    return mesh;
+  }
+
+  // ---------- floor ----------
+  var floor = new THREE.Mesh(new THREE.CircleGeometry(4.6, 48), mFloor);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -1.18;
+  world.add(floor);
+
+  // ---------- desk ----------
+  world.add(box(3.5, 0.09, 1.5, mDesk, 0, 0, -0.1));
+  world.add(box(0.1, 1.1, 1.35, mLeg, -1.66, -0.61, -0.1));
+  world.add(box(0.1, 1.1, 1.35, mLeg,  1.66, -0.61, -0.1));
+
+  // ---------- chair ----------
+  world.add(box(0.85, 0.09, 0.75, mChair, 0, -0.32, -1.45));
+  var backrest = box(0.85, 0.95, 0.1, mChair, 0, 0.14, -1.82);
+  backrest.rotation.x = -0.09;
+  world.add(backrest);
+
+  // ---------- person ----------
+  var person = new THREE.Group();
+  person.position.set(0, 0, -1.2);
+  world.add(person);
+
+  var torso = box(0.8, 0.95, 0.52, mHoodie, 0, 0.5, 0);
+  person.add(torso);
+  // hood bunched at the neck
+  var hood = new THREE.Mesh(new THREE.SphereGeometry(0.26, 16, 12), mHoodie);
+  hood.position.set(0, 0.92, -0.16);
+  hood.scale.set(1.1, 0.7, 0.9);
+  person.add(hood);
+
+  var head = new THREE.Group();
+  head.position.set(0, 1.12, 0.02);
+  person.add(head);
+
+  var skull = new THREE.Mesh(new THREE.SphereGeometry(0.27, 20, 16), mSkin);
+  skull.scale.set(0.94, 1.1, 0.96);
+  head.add(skull);
+
+  var hair = new THREE.Mesh(
+    new THREE.SphereGeometry(0.285, 20, 16, 0, Math.PI * 2, 0, Math.PI * 0.56), mHair
+  );
+  hair.scale.set(0.96, 1.12, 1.0);
+  hair.position.y = 0.02;
+  head.add(hair);
+
+  // arms: shoulder -> elbow fixed, elbow group rotates for typing
+  function buildArm(side) {
+    var sx = 0.44 * side;
+    var shoulder = new THREE.Vector3(sx, 0.82, 0.02);
+    var elbow    = new THREE.Vector3(sx * 1.07, 0.5, 0.42);
+
+    person.add(segment(shoulder, elbow, 0.19, mHoodie));
+
+    var g = new THREE.Group();
+    g.position.copy(elbow);
+    var hand = new THREE.Vector3(0.30 * side - elbow.x, 0.30 - elbow.y, 1.04 - elbow.z);
+    g.add(segment(new THREE.Vector3(0, 0, 0), hand.clone(), 0.165, mHoodie));
+    var h = box(0.19, 0.11, 0.24, mSkin, hand.x, hand.y, hand.z);
+    g.add(h);
+    person.add(g);
+    return g;
+  }
+  var armL = buildArm(-1);
+  var armR = buildArm(1);
+
+  // ---------- laptop ----------
+  var laptop = new THREE.Group();
+  laptop.position.set(0, 0.045, -0.32);
+  world.add(laptop);
+
+  laptop.add(box(1.2, 0.045, 0.78, mLap, 0, 0.022, 0));
+
+  var lid = new THREE.Group();
+  lid.position.set(0, 0.03, 0.39);      // hinge on the far edge from the person
+  lid.rotation.x = 0.36;                 // leans back toward the person
+  laptop.add(lid);
+  lid.add(box(1.2, 0.76, 0.035, mLap, 0, 0.38, 0));
+  lid.add(box(1.09, 0.66, 0.01, mScreen, 0, 0.38, -0.024));
+
+  // ---------- mug ----------
+  var mug = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.095, 0.2, 18), mMug);
+  mug.position.set(0.98, 0.145, -0.42);
+  world.add(mug);
+  var handle = new THREE.Mesh(new THREE.TorusGeometry(0.065, 0.02, 8, 16), mMug);
+  handle.position.set(1.09, 0.15, -0.42);
+  handle.rotation.y = Math.PI / 2;
+  world.add(handle);
+
+  // steam
+  var steam = [];
+  for (var s = 0; s < 4; s++) {
+    var puff = new THREE.Mesh(
+      new THREE.SphereGeometry(0.045, 8, 6),
+      new THREE.MeshBasicMaterial({ color: 0x9aa4b4, transparent: true, opacity: 0 })
+    );
+    puff.position.set(0.98, 0.26, -0.42);
+    steam.push({ mesh: puff, phase: s / 4 });
+    world.add(puff);
+  }
+
+  // ---------- lights ----------
+  scene.add(new THREE.AmbientLight(0x3d4759, 0.62));
+
+  var key = new THREE.DirectionalLight(0xc3cad8, 0.48);
+  key.position.set(3.4, 5, 3.6);
+  scene.add(key);
+
+  var rim = new THREE.DirectionalLight(0x5d5fb8, 0.4);
+  rim.position.set(-4, 2.2, -3.2);
+  scene.add(rim);
+
+  var glow = new THREE.PointLight(0x8e90f2, 2.3, 4.2, 2);
+  glow.position.set(0, 0.62, -0.52);
+  scene.add(glow);
+
+  // ---------- interaction ----------
+  var userRot = 0, velY = 0;
+  var dragging = false, lastX = 0, moved = false;
+  var hint = document.getElementById('vizHint');
+
+  function down(e) {
+    dragging = true;
+    canvas.classList.add('dragging');
+    lastX = (e.touches ? e.touches[0] : e).clientX;
+  }
+  function move(e) {
+    if (!dragging) return;
+    var x = (e.touches ? e.touches[0] : e).clientX;
+    var dx = x - lastX;
+    lastX = x;
+    userRot += dx * 0.006;
+    if (Math.abs(dx) > 2) { moved = true; if (hint) hint.classList.add('gone'); }
+  }
+  function up() { dragging = false; canvas.classList.remove('dragging'); }
+
+  canvas.addEventListener('mousedown', down);
+  window.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', up);
+  canvas.addEventListener('touchstart', down, { passive: true });
+  canvas.addEventListener('touchmove', move, { passive: true });
+  canvas.addEventListener('touchend', up);
+
+  // ---------- sizing ----------
+  function resize() {
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    // pull back a little on narrow screens so nothing is cropped
+    var z = w / h < 1.3 ? 6.9 : 5.65;
+    camera.position.set(3.15, 2.45, z);
+    camera.lookAt(0, 0.55, -0.5);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---------- loop ----------
+  var running = true, t0 = 0;
+
+  function pose(t) {
+    // typing: forearms tick up and down out of phase
+    armL.rotation.x = Math.sin(t * 9.1) * 0.075;
+    armR.rotation.x = Math.sin(t * 9.1 + 2.1) * 0.075;
+
+    // head: slow bob, occasional glance sideways
+    head.position.y = 1.12 + Math.sin(t * 1.5) * 0.012;
+    head.rotation.y = Math.sin(t * 0.33) * 0.16;
+    head.rotation.x = 0.13 + Math.sin(t * 1.5) * 0.02;
+
+    // breathing
+    torso.scale.y = 1 + Math.sin(t * 1.5) * 0.012;
+
+    // screen flicker, very slight
+    var f = 0.93 + Math.sin(t * 3.7) * 0.03 + Math.sin(t * 11.3) * 0.015;
+    mScreen.color.setRGB(0.588 * f, 0.596 * f, 0.961 * f);
+    glow.intensity = 2.3 * f;
+
+    // steam
+    for (var i = 0; i < steam.length; i++) {
+      var p = (t * 0.32 + steam[i].phase) % 1;
+      var m = steam[i].mesh;
+      m.position.y = 0.26 + p * 0.5;
+      m.position.x = 0.98 + Math.sin(p * 5 + i) * 0.045;
+      m.material.opacity = Math.sin(p * Math.PI) * 0.22;
+      m.scale.setScalar(0.6 + p * 0.9);
+    }
+  }
+
+  function frame(now) {
+    requestAnimationFrame(frame);
+    if (!running) return;
+    if (!t0) t0 = now;
+    var t = (now - t0) / 1000;
+
+    if (!dragging) userRot *= 0.986;          // ease back to the resting angle
+    world.rotation.y = Math.sin(t * 0.17) * 0.2 + userRot;
+
+    pose(t);
+    renderer.render(scene, camera);
+  }
+
+  if (reduced) {
+    pose(0.4);
+    world.rotation.y = 0.12;
+    renderer.render(scene, camera);
+    if (hint) hint.textContent = '';
+  } else {
+    requestAnimationFrame(frame);
+    document.addEventListener('visibilitychange', function () {
+      running = !document.hidden; if (running) t0 = 0;
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        running = es[0].isIntersecting && !document.hidden;
+        if (running) t0 = 0;
+      }, { threshold: 0 }).observe(canvas);
+    }
+    setTimeout(function () { if (hint && !moved) hint.classList.add('gone'); }, 9000);
+  }
+})();
+</script>
+
+<script>
+  // Highlight the nav item for the section currently in view.
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+    var map = {};
+    links.forEach(function (a) {
+      var el = document.querySelector(a.getAttribute('href'));
+      if (el) map[el.id] = a;
+    });
+    if (!('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (a) { a.classList.remove('on'); });
+          if (map[e.target.id]) map[e.target.id].classList.add('on');
+        }
+      });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    Object.keys(map).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+  })();
+</script>
+
+</body>
+</html>
